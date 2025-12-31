@@ -14,6 +14,14 @@ def project_list(request):
             "name": p.name_pt if lang == "pt" else p.name_en,
             "summary": p.summary_pt if lang == "pt" else p.summary_en,
             "created_at": p.created_at,
+            "stacks": [
+                {
+                    "id": link.stack.id,
+                    "name": link.stack.name,
+                    "badge_url": link.stack.badge_url
+                }
+                for link in p.stack_links.select_related("stack")
+            ]
         })
 
     return JsonResponse(projects, safe=False)
@@ -31,15 +39,6 @@ def project_detail(request, project_id):
         country=get_country_from_ip(ip)
     )
 
-    stacks = [
-        {
-            "id": link.stack.id,
-            "name": link.stack.name,
-            "badge_url": link.stack.badge_url
-        }
-        for link in project.stack_links.select_related("stack")
-    ]
-
     files = [
         {
             "id": f.id,
@@ -55,7 +54,6 @@ def project_detail(request, project_id):
             "summary": project.summary_pt if lang == "pt" else project.summary_en,
             "created_at": project.created_at,
         },
-        "stacks": stacks,
         "files": files
     }
 
