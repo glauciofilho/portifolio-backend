@@ -78,12 +78,17 @@ def file_detail(request, id_project, id_file):
 
 
 def analytics(request):
+    lang = request.GET.get("lang", "pt")
+    if lang == "pt":
+        name = "name_pt"
+    else:
+        name = "name_en"
     data = {
         "total_accesses": ProjectAccess.objects.count(),
         "projects": list(
             Project.objects.annotate(
                 total=Count("accesses")
-            ).values("id", "name_en", "total")
+            ).values("id", name, "total")
         ),
         "countries": list(
             ProjectAccess.objects.values("country")
