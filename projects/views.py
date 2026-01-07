@@ -5,7 +5,7 @@ from .models import Project, ProjectAccess, File
 from .utils import get_client_ip, get_user_agent, get_country_from_ip
 
 def project_list(request):
-    lang = request.GET.get("lang", "pt")
+    lang = request.GET.get("lang", "en")
 
     projects = []
     for p in Project.objects.all():
@@ -28,7 +28,7 @@ def project_list(request):
 
 def project_detail(request, project_id):
     project = get_object_or_404(Project, id=project_id)
-    lang = request.GET.get("lang", "pt")
+    lang = request.GET.get("lang", "en")
 
     ip = get_client_ip(request)
 
@@ -60,7 +60,7 @@ def project_detail(request, project_id):
     return JsonResponse(data)
 
 def file_detail(request, id_project, id_file):
-    lang = request.GET.get("lang", "pt")
+    lang = request.GET.get("lang", "en")
 
     file = get_object_or_404(
         File,
@@ -78,7 +78,7 @@ def file_detail(request, id_project, id_file):
 
 
 def analytics(request):
-    lang = request.GET.get("lang", "pt")
+    lang = request.GET.get("lang", "en")
     if lang == "pt":
         name = "name_pt"
     else:
